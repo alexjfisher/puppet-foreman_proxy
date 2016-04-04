@@ -61,6 +61,7 @@
 :puppet_ssl_cert: <%= scope.lookupvar("foreman_proxy::puppet_ssl_cert") %>
 :puppet_ssl_key: <%= scope.lookupvar("foreman_proxy::puppet_ssl_key") %>
 
+:puppet_version: <%= scope.lookupvar("puppetversion") %>
 # Override use of Puppet's API to list environments, by default it will use only if
 # environmentpath is given in puppet.conf, else will look for environments in puppet.conf
 <% if [nil, :undefined, :undef].include?(scope.lookupvar("foreman_proxy::puppet_use_environment_api")) %>
