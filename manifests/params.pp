@@ -157,6 +157,13 @@ class foreman_proxy::params {
   $puppet_group       = 'puppet'
   $puppetdir          = $puppet::params::dir
 
+  # The puppet-agent package, (puppet 4 AIO) doesn't create a puppet group
+  if versioncmp($::puppetversion, '4.0') > 0 {
+    $manage_puppet_group = true
+  } else {
+    $manage_puppet_group = false
+  }
+
   # puppetrun settings
   $puppet = true
   $puppet_listen_on = 'https'

@@ -120,5 +120,24 @@ class foreman_proxy::config {
         changes => template('foreman_proxy/sudo_augeas.erb'),
       }
     }
+  } else {
+    # The puppet-agent (puppet 4 AIO package) doesn't create a puppet user and group
+    # but the foreman proxy still needs to be able to read the agent's private key
+    if $foreman_proxy::manage_puppet_group and $foreman_proxy::ssl {
+      if !defined(Group[$foreman_proxy::puppet_group]) {
+        group { $foreman_proxy::puppet_group:
+          ensure => 'present',
+          before => User[$foreman_proxy::user],
+        }
+      }
+      file { [
+        $foreman_proxy::ssldir,
+        "${foreman_proxy::ssldir}/private_keys",
+        $foreman_proxy::ssl_ca,
+        $foreman_proxy::ssl_key,
+        $foreman_proxy::ssl_cert ]:
+        group => $foreman_proxy::puppet_group,
+      }
+    }
   }
 }
