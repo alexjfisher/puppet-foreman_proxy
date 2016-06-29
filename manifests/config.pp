@@ -130,12 +130,14 @@ class foreman_proxy::config {
           before => User[$foreman_proxy::user],
         }
       }
-      file { [
+      $ssl_dirs_and_files = [
         $foreman_proxy::ssldir,
         "${foreman_proxy::ssldir}/private_keys",
         $foreman_proxy::ssl_ca,
         $foreman_proxy::ssl_key,
-        $foreman_proxy::ssl_cert ]:
+        $foreman_proxy::ssl_cert,
+      ]
+      file { $ssl_dirs_and_files:
         group => $foreman_proxy::puppet_group,
       }
     }
